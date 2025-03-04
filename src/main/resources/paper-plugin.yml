@@ -1,0 +1,8 @@
+name: FakePlayers
+version: '1.0.0'
+main: app.adriano.fakeplayers.FakePlayersPlugin
+api-version: '1.21'
+prefix: [ FakePlayersPlugin ]
+authors: [ Adriano Vargas ]
+description: Um plugin que cria Fake Players para PaperMC.
+website: https://adriano.app
