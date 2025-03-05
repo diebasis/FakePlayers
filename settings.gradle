@@ -1,1 +1,10 @@
+/**
+ * Arquivo de configuração do Gradle.
+ * Este arquivo define as configurações básicas do projeto Gradle.
+ */
+
+// Nome do projeto
 rootProject.name = 'FakePlayers'
+
+// Configurações do Gradle
+gradle.startParameter.showStacktrace = ShowStacktrace.ALWAYS

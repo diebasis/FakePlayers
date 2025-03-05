@@ -1,8 +1,34 @@
+# Arquivo de configuração principal do plugin
+# Este arquivo define as informações básicas do plugin para o Paper
+
+# Nome do plugin que será exibido no console e logs
 name: FakePlayers
-version: '1.0.0'
+
+# Versão do plugin (será substituída automaticamente pelo Gradle durante o build)
+version: '${version}'
+
+# Nome do pacote principal do plugin
 main: app.adriano.fakeplayers.FakePlayersPlugin
+
+# Versão da API do Paper necessária para o plugin funcionar
 api-version: '1.21'
-prefix: [ FakePlayersPlugin ]
-authors: [ Adriano Vargas ]
-description: Um plugin que cria Fake Players para PaperMC.
-website: https://adriano.app
+
+# Lista de autores do plugin
+authors: [Adriano Vargas]
+
+# Descrição do plugin
+description: Plugin para criar jogadores falsos no servidor
+
+# URL do site do plugin (opcional)
+website: https://github.com/diebasis/FakePlayers
+
+# Lista de dependências do plugin (opcional)
+depend: []
+
+# Configuração dos comandos do plugin
+commands:
+  fp:
+    description: Comando principal do FakePlayers
+    usage: /<command> [info|ping]
+    aliases: [fakeplayers]
+    permission: fakeplayers.use

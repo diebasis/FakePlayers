@@ -1,6 +1,8 @@
 package app.adriano.fakeplayers;
 
 // Importações necessárias para manipulação de texto e cores no console
+import app.adriano.fakeplayers.commands.InfoCommand;
+import app.adriano.fakeplayers.commands.PingCommand;
 import net.kyori.adventure.text.Component;  // Classe principal para manipulação de texto
 import net.kyori.adventure.text.format.NamedTextColor;  // Classe para cores predefinidas
 import org.bukkit.plugin.java.JavaPlugin;  // Classe base para plugins do Bukkit/Paper
@@ -25,12 +27,11 @@ public final class FakePlayersPlugin extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        // TODO: Implementar lógica de inicialização
-        // 1. Carregar configurações
-        // 2. Registrar comandos
-        // 3. Registrar listeners
-        // 4. Inicializar gerenciadores
-        // 5. Carregar dados salvos
+        // Registra os comandos do plugin
+        // getCommand() - Obtém o comando pelo nome definido no plugin.yml
+        // setExecutor() - Define quem vai executar o comando
+        getCommand("fp").setExecutor(new InfoCommand(this));
+        getCommand("fp").setExecutor(new PingCommand(this));
         
         // Mensagem de inicialização
         // getServer() - Obtém a instância do servidor
