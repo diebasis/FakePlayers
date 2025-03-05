@@ -82,13 +82,13 @@ public class InfoCommand implements CommandExecutor, TabCompleter {
         
         // Cria uma mensagem formatada com as informações
         Component message = Component.text()
-            .append(Component.text("=============================================\n", NamedTextColor.GREEN))
+            .append(Component.text("==============================================\n", NamedTextColor.GREEN))
             .append(Component.text("FakePlayers v" + meta.getVersion() + "\n", NamedTextColor.GREEN))
             .append(Component.text("Autores: ", NamedTextColor.YELLOW))
             .append(Component.text(String.join(", ", meta.getAuthors()) + "\n", NamedTextColor.WHITE))
             .append(Component.text("Descrição: ", NamedTextColor.YELLOW))
             .append(Component.text(meta.getDescription() + "\n", NamedTextColor.WHITE))
-            .append(Component.text("=============================================", NamedTextColor.GREEN))
+            .append(Component.text("==============================================", NamedTextColor.GREEN))
             .build();
 
         // Envia a mensagem para quem executou o comando

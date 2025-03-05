@@ -5,7 +5,7 @@
 name: FakePlayers
 
 # Versão do plugin (será substituída automaticamente pelo Gradle durante o build)
-version: '0.1.3'
+version: '0.1.4'
 
 # Nome do pacote principal do plugin
 main: app.adriano.fakeplayers.FakePlayersPlugin

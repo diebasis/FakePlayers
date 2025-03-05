@@ -1,0 +1,75 @@
+# Configurações do FakePlayers
+# Versão: 0.1.4
+
+# Sistema de Cores (v0.1.4)
+# Você pode usar estes códigos em qualquer mensagem do plugin:
+#
+# Cores Básicas:
+# &0 - Preto          &8 - Cinza escuro
+# &1 - Azul escuro    &9 - Azul
+# &2 - Verde escuro   &a - Verde claro
+# &3 - Ciano escuro   &b - Ciano
+# &4 - Vermelho       &c - Vermelho claro
+# &5 - Roxo           &d - Rosa
+# &6 - Dourado        &e - Amarelo
+# &7 - Cinza          &f - Branco
+#
+# Formatação:
+# &l - Negrito
+# &n - Sublinhado
+# &o - Itálico
+# &k - Texto embaralhado
+# &m - Riscado
+# &r - Remove formatação
+#
+# Exemplo: "&aOlá &b%player%&a!" -> Texto em verde com nome do jogador em ciano
+
+# Configurações Gerais
+general:
+  # Prefixo usado em todas as mensagens do plugin
+  # Exemplo: "&a[FakePlayers] &f" -> [FakePlayers] em verde, seguido de texto branco
+  prefix: "&a[FakePlayers] &r"
+
+  # Sistema de Debug (v0.1.4)
+  # Se true, mostra mensagens detalhadas no console sobre:
+  # - Inicialização de componentes
+  # - Execução de comandos
+  # - Eventos do servidor
+  # - Operações de configuração
+  debug: false
+
+  # Intervalo em segundos para atualização de informações
+  update-interval: 60
+
+# Mensagens do Plugin
+messages:
+  # Mensagens dos Comandos
+  commands:
+    # Comando /fp info
+    info: "&aInformações do plugin:"
+    
+    # Comando /fp ping
+    # Use %time% para mostrar o tempo de resposta
+    ping: "&aPong! &eTempo de resposta: &f%time%ms"
+    
+    # Comando /fp reload (v0.1.4)
+    reload: "&aConfigurações recarregadas com sucesso!"
+    
+    # Mensagem de erro de permissão
+    no-permission: "&cVocê não tem permissão para usar este comando!"
+  
+  # Mensagens do Console
+  console:
+    # Use %version% para mostrar a versão atual do plugin
+    enabled: "&aFakePlayers v%version% carregado com sucesso!"
+    disabled: "&aFakePlayers v%version% desativado com sucesso!"
+
+# Sistema de Permissões
+permissions:
+  # Permissão base para usar qualquer comando
+  base: "fakeplayers.use"
+  
+  # Permissões específicas para cada comando
+  info: "fakeplayers.info"
+  ping: "fakeplayers.ping"
+  reload: "fakeplayers.reload" 

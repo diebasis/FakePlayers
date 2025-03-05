@@ -23,13 +23,100 @@
 
 ### Estrutura de Pacotes
 ```
-app.adriano.fakeplayers/
-├── FakePlayersPlugin.java    # Classe principal do plugin
-├── commands/                 # Pacote de comandos
-│   ├── InfoCommand.java     # Comando de informações
-│   └── PingCommand.java     # Comando de teste de latência
-└── listeners/               # Pacote de listeners (futuro)
+FakePlayers/
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── app/
+│       │       └── adriano/
+│       │           └── fakeplayers/
+│       │               ├── FakePlayersPlugin.java
+│       │               ├── commands/
+│       │               │   ├── InfoCommand.java
+│       │               │   ├── PingCommand.java
+│       │               │   └── ReloadCommand.java
+│       │               ├── config/
+│       │               │   └── ConfigManager.java
+│       │               └── listeners/
+│       │                   ├── BaseListener.java
+│       │                   ├── TestListener.java
+│       │                   └── package-info.java
+│       └── resources/
+│           ├── paper-plugin.yml
+│           └── config.yml
+└── build.gradle
 ```
+
+### Componentes Principais
+
+#### Sistema de Configuração (v0.1.4)
+O `ConfigManager` é o componente central do sistema de configuração:
+
+1. **Funcionalidades**:
+   - Carregamento/salvamento de configurações
+   - Recarregamento em tempo real
+   - Conversão de cores automática
+   - Sistema de debug integrado
+
+2. **Métodos Principais**:
+   ```java
+   public String getString(String path, String defaultValue)
+   public boolean getBoolean(String path, boolean defaultValue)
+   public void debug(String message)
+   public boolean reloadConfig()
+   ```
+
+3. **Uso do Debug**:
+   ```java
+   configManager.debug("Mensagem de debug");
+   ```
+
+4. **Exemplo de Configuração**:
+   ```yaml
+   general:
+     debug: true
+     prefix: "&a[FakePlayers] &r"
+   ```
+
+#### Sistema de Cores (v0.1.4)
+Implementação robusta de cores usando a API do Bukkit:
+
+1. **Códigos de Cores**:
+   - Básicas: `&0` a `&9`
+   - Extras: `&a` a `&f`
+   - Formatação: `&l`, `&n`, `&o`, etc.
+
+2. **Processo de Conversão**:
+   ```java
+   ChatColor.translateAlternateColorCodes('&', text)
+   ```
+
+3. **Uso em Mensagens**:
+   ```yaml
+   messages:
+     info: "&aInformações do plugin:"
+     error: "&cErro: &f%message%"
+   ```
+
+#### Sistema de Debug (v0.1.4)
+Implementação de logs detalhados para diagnóstico:
+
+1. **Configuração**:
+   ```yaml
+   general:
+     debug: true
+   ```
+
+2. **Níveis de Log**:
+   - Inicialização de componentes
+   - Execução de comandos
+   - Eventos do servidor
+   - Operações de configuração
+
+3. **Formato de Mensagens**:
+   ```
+   [FakePlayers] [DEBUG] mensagem
+   ```
 
 ### Diagramas de Sequência
 
@@ -97,6 +184,65 @@ graph TD
 
 ## 🔧 Detalhes Técnicos
 
+### Importações do Projeto
+O plugin utiliza diversas bibliotecas e APIs. Aqui está um guia detalhado das importações:
+
+#### Paper/Bukkit API
+```java
+import org.bukkit.command.Command;              // Classe base para comandos
+import org.bukkit.command.CommandExecutor;      // Interface para executar comandos
+import org.bukkit.command.CommandSender;        // Representa quem enviou o comando
+import org.bukkit.command.TabCompleter;         // Interface para sugestões de comandos
+import org.bukkit.plugin.java.JavaPlugin;       // Classe base para plugins
+import org.bukkit.event.Listener;               // Interface para listeners de eventos
+import org.bukkit.ChatColor;                    // Utilitário para cores no chat
+```
+- **Origem**: Paper/Bukkit API
+- **Uso**: Funcionalidades básicas do servidor Minecraft
+- **Documentação**: [Paper API Docs](https://docs.papermc.io/paper/dev/getting-started)
+
+#### Adventure API (Textos e Componentes)
+```java
+import net.kyori.adventure.text.Component;           // Sistema moderno de texto
+import net.kyori.adventure.text.format.NamedTextColor; // Cores predefinidas
+```
+- **Origem**: Adventure API (KyoriPowered)
+- **Uso**: Sistema moderno de formatação de texto
+- **Documentação**: [Adventure API Docs](https://docs.adventure.kyori.net/)
+
+#### Java Standard
+```java
+import java.io.File;                    // Manipulação de arquivos
+import java.io.IOException;             // Tratamento de erros de I/O
+import java.io.InputStream;             // Leitura de dados
+import java.io.InputStreamReader;        // Leitura de texto
+import java.nio.charset.StandardCharsets; // Codificação de caracteres
+import java.util.logging.Level;          // Níveis de log
+```
+- **Origem**: Java Standard Library
+- **Uso**: Operações básicas de I/O e sistema
+- **Documentação**: [Java API Docs](https://docs.oracle.com/javase/21/docs/)
+
+#### Configuração
+```java
+import org.bukkit.configuration.file.FileConfiguration; // Base para configs
+import org.bukkit.configuration.file.YamlConfiguration; // Configs em YAML
+```
+- **Origem**: Bukkit API
+- **Uso**: Sistema de configuração em YAML
+- **Documentação**: [Bukkit Configuration](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/configuration/file/FileConfiguration.html)
+
+#### Pacotes do Plugin
+```java
+import app.adriano.fakeplayers.FakePlayersPlugin;     // Classe principal
+import app.adriano.fakeplayers.commands.*;            // Comandos
+import app.adriano.fakeplayers.config.ConfigManager;  // Gerenciador de config
+import app.adriano.fakeplayers.listeners.*;           // Listeners
+```
+- **Origem**: Próprio plugin
+- **Uso**: Organização do código em pacotes
+- **Estrutura**: Segue padrões de design Java
+
 ### Versões e Dependências
 - Java: 21
 - Paper API: 1.21.4
@@ -111,11 +257,13 @@ graph TD
 ### Comandos
 - `/fp info`: Mostra informações detalhadas sobre o plugin
 - `/fp ping`: Testa a latência do servidor e do plugin
-- Mais comandos serão adicionados no futuro
+- `/fp reload`: Recarrega as configurações do plugin
 
 ### Permissões
 - `fakeplayers.use`: Permissão base para usar comandos
-- Mais permissões serão adicionadas no futuro
+- `fakeplayers.info`: Permissão para usar o comando info
+- `fakeplayers.ping`: Permissão para usar o comando ping
+- `fakeplayers.reload`: Permissão para recarregar configurações
 
 ## 📝 Guia de Manutenção
 
@@ -163,16 +311,19 @@ graph TD
 
 ## 📈 Roadmap
 
-### Versão 0.1.x
+### Versão 0.1.x (Atual)
 - [x] Estrutura básica do plugin
 - [x] Comandos básicos
-- [x] Listener básico (TestListener)
-- [ ] Sistema de configuração
+- [x] Sistema de configuração completo
+- [x] Sistema de cores e formatação
+- [x] Sistema de debug
+- [x] Documentação abrangente
 
-### Versão 0.2.x
-- [ ] Criação de Fake Players
-- [ ] Personalização de aparência
-- [ ] Comportamentos básicos
+### Versão 0.2.x (Próxima)
+- [ ] Sistema de Fake Players
+  - [ ] Criação e remoção
+  - [ ] Personalização
+  - [ ] Comportamentos básicos
 
 ### Versão 0.3.x
 - [ ] Sistema de IA
@@ -184,19 +335,84 @@ graph TD
 - **Comandos:**
   - `/fp info`: Exibe informações detalhadas sobre o plugin.
   - `/fp ping`: Testa a latência do servidor e do plugin.
+  - `/fp reload`: Recarrega as configurações do plugin.
 
 - **Listeners:**
   - `TestListener`: Listener básico que registra quando um jogador entra no servidor.
 
 ## Estrutura do Projeto
 
-```uml
-@startuml
-FakePlayersPlugin --> InfoCommand
-FakePlayersPlugin --> PingCommand
-FakePlayersPlugin --> TestListener
-TestListener --|> BaseListener
-@enduml
+### Pacotes
+- `app.adriano.fakeplayers` - Pacote principal
+- `app.adriano.fakeplayers.commands` - Comandos do plugin
+- `app.adriano.fakeplayers.config` - Sistema de configuração
+- `app.adriano.fakeplayers.listeners` - Listeners de eventos
+
+### Classes Principais
+
+#### FakePlayersPlugin
+- Classe principal do plugin
+- Gerencia inicialização e desativação
+- Registra comandos e listeners
+- Integra com o sistema de debug
+
+#### ConfigManager
+- Gerencia configurações do plugin
+- Carrega/salva configurações do `config.yml`
+- Converte códigos de cores (`&` para `§`)
+- Sistema de debug integrado
+  - Método `debug(String message)` para logs condicionais
+  - Controlado pela opção `general.debug` no `config.yml`
+
+### Sistema de Cores
+O plugin utiliza o sistema de cores do Minecraft:
+- Códigos precedidos por `&` (ex: `&a`, `&b`)
+- Convertidos automaticamente para o formato do Minecraft (`§`)
+- Suporta cores e formatação (negrito, itálico, etc.)
+- Conversão feita pelo `ConfigManager.getString()`
+
+### Sistema de Debug
+- Ativado via `general.debug: true` no `config.yml`
+- Logs detalhados de:
+  - Inicialização de componentes
+  - Execução de comandos
+  - Eventos importantes
+- Formato: `[FakePlayers] [DEBUG] mensagem`
+
+### Comandos
+1. `/fp info` - Informações do plugin
+2. `/fp ping` - Testa latência
+3. `/fp reload` - Recarrega configurações
+
+### Configuração
+Arquivo: `config.yml`
+```yaml
+general:
+  prefix: Prefixo das mensagens
+  debug: Modo debug (true/false)
+  update-interval: Intervalo de atualização
+
+messages:
+  commands: Mensagens dos comandos
+  console: Mensagens do console
+
+permissions:
+  base: Permissão base
+  info: Permissão do comando info
+  ping: Permissão do comando ping
+  reload: Permissão do comando reload
+```
+
+## Desenvolvimento
+Para contribuir:
+1. Fork o repositório
+2. Crie uma branch para sua feature
+3. Faça commits com mensagens claras
+4. Envie um pull request
+
+## Compilação
+```bash
+./gradlew clean build
 ```
 
 ## Referências Externas
@@ -208,4 +424,25 @@ TestListener --|> BaseListener
 ## Bibliotecas e Frameworks
 
 - **Bukkit/Paper:** Plataforma base para desenvolvimento do plugin.
-- **Adventure API:** Manipulação avançada de texto e cores no console e mensagens do jogo. 
+- **Adventure API:** Manipulação avançada de texto e cores no console e mensagens do jogo.
+
+## Sistema de Configuração
+
+### ConfigManager
+A classe `ConfigManager` é responsável por gerenciar todas as configurações do plugin. Ela fornece métodos para:
+- Carregar configurações do arquivo config.yml
+- Salvar alterações nas configurações
+- Recarregar configurações em tempo de execução
+- Acessar valores configurados com tipos específicos
+
+### Arquivo config.yml
+O arquivo de configuração principal contém todas as configurações do plugin em formato YAML. Ele é dividido em seções:
+- `general`: Configurações gerais do plugin
+- `messages`: Mensagens personalizáveis
+- `permissions`: Permissões do plugin
+
+### Recarregamento de Configurações
+O comando `/fp reload` permite recarregar as configurações sem reiniciar o servidor. Este comando:
+1. Lê o arquivo config.yml novamente
+2. Atualiza as configurações em memória
+3. Notifica o usuário sobre o resultado 

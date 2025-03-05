@@ -6,11 +6,13 @@
 // Define os plugins necessários para o projeto
 plugins {
     id 'java'  // Plugin Java para compilação e empacotamento
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 // Define o grupo e versão do projeto
 group = 'app.adriano'
-version = '0.1.3'
+version = '0.1.4'
+description = 'Plugin para criar jogadores falsos no servidor'
 
 // Configura os repositórios de onde as dependências serão baixadas
 repositories {

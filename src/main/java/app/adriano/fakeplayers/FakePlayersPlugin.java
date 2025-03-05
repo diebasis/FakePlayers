@@ -3,6 +3,8 @@ package app.adriano.fakeplayers;
 // Importações necessárias para manipulação de texto e cores no console
 import app.adriano.fakeplayers.commands.InfoCommand;
 import app.adriano.fakeplayers.commands.PingCommand;
+import app.adriano.fakeplayers.commands.ReloadCommand;
+import app.adriano.fakeplayers.config.ConfigManager;
 import app.adriano.fakeplayers.listeners.TestListener;
 import net.kyori.adventure.text.Component;  // Classe principal para manipulação de texto
 import net.kyori.adventure.text.format.NamedTextColor;  // Classe para cores predefinidas
@@ -27,6 +29,7 @@ import org.bukkit.plugin.java.JavaPlugin;  // Classe base para plugins do Bukkit
 public final class FakePlayersPlugin extends JavaPlugin {
 
     private TestListener testListener;
+    private ConfigManager configManager;
 
     /**
      * Método chamado quando o plugin é habilitado.
@@ -45,42 +48,47 @@ public final class FakePlayersPlugin extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        // Inicializa o gerenciador de configuração
+        configManager = new ConfigManager(this);
+        configManager.debug("ConfigManager inicializado");
+        
         // Registra o listener de teste
         testListener = new TestListener(this);
         testListener.register();
+        configManager.debug("TestListener registrado");
         
         // Registra os comandos do plugin
-        // Cria e configura o comando principal
         CommandExecutor executor = (sender, command, label, args) -> {
-            // Se não houver argumentos, mostra a ajuda
+            configManager.debug("Comando recebido: /" + label + " " + String.join(" ", args));
+            
             if (args.length == 0) {
-                sender.sendMessage(Component.text("Uso: /fp [info|ping]", NamedTextColor.RED));
+                sender.sendMessage(Component.text("Uso: /fp [info|ping|reload]", NamedTextColor.RED));
                 return true;
             }
             
-            // Processa os subcomandos
             switch (args[0].toLowerCase()) {
                 case "info":
+                    configManager.debug("Executando comando info");
                     return new InfoCommand(this).onCommand(sender, command, label, args);
                 case "ping":
-                    return new PingCommand().onCommand(sender, command, label, args);
+                    configManager.debug("Executando comando ping");
+                    return new PingCommand(this).onCommand(sender, command, label, args);
+                case "reload":
+                    configManager.debug("Executando comando reload");
+                    return new ReloadCommand(this).onCommand(sender, command, label, args);
                 default:
-                    sender.sendMessage(Component.text("Subcomando desconhecido. Use: /fp [info|ping]", NamedTextColor.RED));
+                    sender.sendMessage(Component.text("Subcomando desconhecido. Use: /fp [info|ping|reload]", NamedTextColor.RED));
                     return true;
             }
         };
         
-        // Configura o tab completer para sugestões de comandos
         TabCompleter completer = (sender, command, alias, args) -> {
-            // Retorna sugestões apenas para o primeiro argumento
             if (args.length == 1) {
-                return java.util.Arrays.asList("info", "ping");
+                return java.util.Arrays.asList("info", "ping", "reload");
             }
             return java.util.Collections.emptyList();
         };
         
-        // Registra o comando no servidor
-        // Cria uma nova instância do comando com nome "fp"
         getServer().getCommandMap().register("fakeplayers", new Command("fp") {
             @Override
             public boolean execute(CommandSender sender, String label, String[] args) {
@@ -94,28 +102,20 @@ public final class FakePlayersPlugin extends JavaPlugin {
         });
         
         // Mensagem de inicialização
-        // getServer() - Obtém a instância do servidor
-        // getConsoleSender() - Obtém o sender do console (para enviar mensagens)
-        // sendMessage() - Envia uma mensagem para o console
-        // Component.text() - Cria um novo componente de texto
-        // color() - Define a cor do texto
-        // NamedTextColor.GREEN - Cor verde predefinida
+        String version = getPluginMeta().getVersion();
+        String enabledMessage = configManager.getString("messages.console.enabled", "&aFakePlayers v%version% carregado com sucesso!")
+            .replace("%version%", version);
         
-        // Linha decorativa superior
         getServer().getConsoleSender().sendMessage(
             Component.text("=============================================")
                     .color(NamedTextColor.GREEN)
         );
         
-        // Mensagem principal com a versão do plugin
-        // getPluginMeta() - Obtém as informações do plugin (versão, nome, etc)
-        // getVersion() - Obtém a versão atual do plugin
         getServer().getConsoleSender().sendMessage(
-            Component.text("FakePlayers v" + getPluginMeta().getVersion() + " carregado com sucesso!")
+            Component.text(enabledMessage)
                     .color(NamedTextColor.GREEN)
         );
         
-        // Linha decorativa inferior
         getServer().getConsoleSender().sendMessage(
             Component.text("=============================================")
                     .color(NamedTextColor.GREEN)
@@ -140,37 +140,36 @@ public final class FakePlayersPlugin extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        // Desregistra o listener de teste
         if (testListener != null) {
             testListener.unregister();
         }
         
-        // TODO: Implementar lógica de desativação
-        // 1. Salvar dados
-        // 2. Limpar recursos
-        // 3. Cancelar tarefas agendadas
-        // 4. Desregistrar listeners
+        String version = getPluginMeta().getVersion();
+        String disabledMessage = configManager.getString("messages.console.disabled", "&aFakePlayers v%version% desativado com sucesso!")
+            .replace("%version%", version);
         
-        // Mensagem de desativação
-        // Utiliza os mesmos métodos do onEnable para manter consistência visual
-        // A única diferença é o texto da mensagem que indica desativação
-        
-        // Linha decorativa superior
         getServer().getConsoleSender().sendMessage(
             Component.text("=============================================")
                     .color(NamedTextColor.GREEN)
         );
         
-        // Mensagem principal com a versão do plugin
         getServer().getConsoleSender().sendMessage(
-            Component.text("FakePlayers v" + getPluginMeta().getVersion() + " desativado com sucesso!")
+            Component.text(disabledMessage)
                     .color(NamedTextColor.GREEN)
         );
         
-        // Linha decorativa inferior
         getServer().getConsoleSender().sendMessage(
             Component.text("=============================================")
                     .color(NamedTextColor.GREEN)
         );
+    }
+
+    /**
+     * Obtém o gerenciador de configuração do plugin.
+     * 
+     * @return ConfigManager com as configurações do plugin
+     */
+    public ConfigManager getConfigManager() {
+        return configManager;
     }
 }
