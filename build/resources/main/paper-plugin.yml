@@ -17,18 +17,10 @@ api-version: '1.21'
 authors: [Adriano Vargas]
 
 # Descrição do plugin
-description: Plugin para criar jogadores falsos no servidor
+description: Plugin para criar Fake Players no servidor
 
 # URL do site do plugin (opcional)
 website: https://github.com/diebasis/FakePlayers
 
 # Lista de dependências do plugin (opcional)
 depend: []
-
-# Configuração dos comandos do plugin
-commands:
-  fp:
-    description: Comando principal do FakePlayers
-    usage: /<command> [info|ping]
-    aliases: [fakeplayers]
-    permission: fakeplayers.use

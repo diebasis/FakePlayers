@@ -5,6 +5,10 @@ import app.adriano.fakeplayers.commands.InfoCommand;
 import app.adriano.fakeplayers.commands.PingCommand;
 import net.kyori.adventure.text.Component;  // Classe principal para manipulação de texto
 import net.kyori.adventure.text.format.NamedTextColor;  // Classe para cores predefinidas
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;  // Classe base para plugins do Bukkit/Paper
 
 /**
@@ -14,6 +18,10 @@ import org.bukkit.plugin.java.JavaPlugin;  // Classe base para plugins do Bukkit
  * 
  * A classe é marcada como 'final' para evitar que seja estendida por outras classes,
  * garantindo que seja a única implementação do plugin.
+ * 
+ * @see org.bukkit.plugin.java.JavaPlugin
+ * @see app.adriano.fakeplayers.commands.InfoCommand
+ * @see app.adriano.fakeplayers.commands.PingCommand
  */
 public final class FakePlayersPlugin extends JavaPlugin {
 
@@ -24,14 +32,59 @@ public final class FakePlayersPlugin extends JavaPlugin {
      * 
      * O método é sobrescrito (@Override) da classe JavaPlugin e é chamado automaticamente
      * pelo servidor quando o plugin é carregado.
+     * 
+     * Fluxo de execução:
+     * 1. Registra os comandos do plugin
+     * 2. Configura as mensagens de console
+     * 3. Inicializa outras funcionalidades (futuro)
+     * 
+     * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
      */
     @Override
     public void onEnable() {
         // Registra os comandos do plugin
-        // getCommand() - Obtém o comando pelo nome definido no plugin.yml
-        // setExecutor() - Define quem vai executar o comando
-        getCommand("fp").setExecutor(new InfoCommand(this));
-        getCommand("fp").setExecutor(new PingCommand(this));
+        // Cria e configura o comando principal
+        CommandExecutor executor = (sender, command, label, args) -> {
+            // Se não houver argumentos, mostra a ajuda
+            if (args.length == 0) {
+                sender.sendMessage(Component.text("Uso: /fp [info|ping]", NamedTextColor.RED));
+                return true;
+            }
+            
+            // Processa os subcomandos
+            switch (args[0].toLowerCase()) {
+                case "info":
+                    return new InfoCommand(this).onCommand(sender, command, label, args);
+                case "ping":
+                    return new PingCommand().onCommand(sender, command, label, args);
+                default:
+                    sender.sendMessage(Component.text("Subcomando desconhecido. Use: /fp [info|ping]", NamedTextColor.RED));
+                    return true;
+            }
+        };
+        
+        // Configura o tab completer para sugestões de comandos
+        TabCompleter completer = (sender, command, alias, args) -> {
+            // Retorna sugestões apenas para o primeiro argumento
+            if (args.length == 1) {
+                return java.util.Arrays.asList("info", "ping");
+            }
+            return java.util.Collections.emptyList();
+        };
+        
+        // Registra o comando no servidor
+        // Cria uma nova instância do comando com nome "fp"
+        getServer().getCommandMap().register("fakeplayers", new Command("fp") {
+            @Override
+            public boolean execute(CommandSender sender, String label, String[] args) {
+                return executor.onCommand(sender, this, label, args);
+            }
+            
+            @Override
+            public java.util.List<String> tabComplete(CommandSender sender, String alias, String[] args) {
+                return completer.onTabComplete(sender, this, alias, args);
+            }
+        });
         
         // Mensagem de inicialização
         // getServer() - Obtém a instância do servidor
@@ -69,6 +122,14 @@ public final class FakePlayersPlugin extends JavaPlugin {
      * 
      * O método é sobrescrito (@Override) da classe JavaPlugin e é chamado automaticamente
      * pelo servidor quando o plugin é desativado.
+     * 
+     * Fluxo de execução:
+     * 1. Salvar dados (futuro)
+     * 2. Limpar recursos (futuro)
+     * 3. Cancelar tarefas agendadas (futuro)
+     * 4. Desregistrar listeners (futuro)
+     * 
+     * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
      */
     @Override
     public void onDisable() {

@@ -1,18 +1,18 @@
 # FakePlayers
 
-Um plugin para Minecraft Paper que permite criar jogadores falsos no servidor.
+Um plugin para Minecraft Paper que permite criar Fake Players no servidor.
 
 ## 📋 Descrição
 
-FakePlayers é um plugin que permite criar jogadores falsos no seu servidor Minecraft. Esses jogadores podem ser usados para diversos propósitos, como:
+FakePlayers é um plugin que permite criar Fake Players no seu servidor Minecraft. Esses jogadores podem ser usados para diversos propósitos, como:
 - Simular atividade no servidor
-- Criar NPCs personalizados
-- Gerar interações automáticas
-- Entre outros usos criativos
+- Testar plugins e sistemas
+- Criar ambientes mais realistas
+- E muito mais!
 
 ## 🚀 Funcionalidades
 
-- [ ] Criação de jogadores falsos
+- [ ] Criação de Fake Players
 - [ ] Personalização de aparência
 - [ ] Comportamentos programáveis
 - [ ] Sistema de comandos intuitivo
