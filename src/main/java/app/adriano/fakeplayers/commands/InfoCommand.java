@@ -12,16 +12,16 @@ import org.bukkit.command.TabCompleter;
  * Comando que exibe informações sobre o plugin.
  * Este comando é executado quando um jogador ou o console usa o comando /fp info
  * 
- * O comando:
- * - Mostra o nome do plugin
- * - Mostra a versão atual
- * - Lista os autores
- * - Exibe a descrição
+ * Implementação:
+ * 1. Obtém as informações do plugin via PluginMeta
+ * 2. Formata as informações com cores diferentes
+ * 3. Envia a mensagem formatada ao jogador
  * 
- * Este comando é útil para:
- * 1. Verificar a versão instalada
- * 2. Confirmar se o plugin está funcionando
- * 3. Obter informações básicas do plugin
+ * Detalhes Técnicos:
+ * - Usa Adventure API para formatação de texto
+ * - Implementa CommandExecutor para processar o comando
+ * - Implementa TabCompleter para sugestões (não utilizado)
+ * - Requer instância do plugin para acessar metadados
  * 
  * @see org.bukkit.command.CommandExecutor
  * @see org.bukkit.command.TabCompleter
@@ -33,12 +33,23 @@ public class InfoCommand implements CommandExecutor, TabCompleter {
      * Instância principal do plugin.
      * Usada para acessar informações como versão, nome, etc.
      * 
+     * Implementação:
+     * - Inicializada no construtor
+     * - Usada para acessar PluginMeta
+     * - Permite acesso a configurações
+     * 
      * @see app.adriano.fakeplayers.FakePlayersPlugin
      */
     private final FakePlayersPlugin plugin;
 
     /**
      * Construtor do comando.
+     * Inicializa a instância do plugin.
+     * 
+     * Implementação:
+     * - Recebe a instância do plugin
+     * - Armazena para uso posterior
+     * - Prepara o comando para execução
      * 
      * @param plugin Instância principal do plugin
      */
@@ -48,7 +59,13 @@ public class InfoCommand implements CommandExecutor, TabCompleter {
 
     /**
      * Método chamado quando o comando é executado.
-     * Cria e envia uma mensagem formatada com as informações do plugin.
+     * Obtém e exibe informações sobre o plugin.
+     * 
+     * Implementação:
+     * 1. Obtém PluginMeta do plugin
+     * 2. Extrai informações relevantes
+     * 3. Formata a mensagem
+     * 4. Envia ao jogador
      * 
      * @param sender Quem executou o comando (jogador ou console)
      * @param command O comando que foi executado
@@ -61,25 +78,17 @@ public class InfoCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // Obtém as informações do plugin
-        // getPluginMeta() - Retorna as informações do plugin
-        // getName() - Nome do plugin
-        // getVersion() - Versão atual
-        // getAuthors() - Lista de autores
-        // getDescription() - Descrição do plugin
         var meta = plugin.getPluginMeta();
         
         // Cria uma mensagem formatada com as informações
-        // Component.text() - Cria um novo componente de texto
-        // append() - Adiciona mais texto ao componente
-        // color() - Define a cor do texto
-        // build() - Finaliza a construção do componente
         Component message = Component.text()
-            .append(Component.text("FakePlayers ", NamedTextColor.GREEN))
-            .append(Component.text("v" + meta.getVersion() + "\n", NamedTextColor.WHITE))
+            .append(Component.text("=============================================\n", NamedTextColor.GREEN))
+            .append(Component.text("FakePlayers v" + meta.getVersion() + "\n", NamedTextColor.GREEN))
             .append(Component.text("Autores: ", NamedTextColor.YELLOW))
             .append(Component.text(String.join(", ", meta.getAuthors()) + "\n", NamedTextColor.WHITE))
             .append(Component.text("Descrição: ", NamedTextColor.YELLOW))
-            .append(Component.text(meta.getDescription(), NamedTextColor.WHITE))
+            .append(Component.text(meta.getDescription() + "\n", NamedTextColor.WHITE))
+            .append(Component.text("=============================================", NamedTextColor.GREEN))
             .build();
 
         // Envia a mensagem para quem executou o comando
@@ -90,6 +99,10 @@ public class InfoCommand implements CommandExecutor, TabCompleter {
     /**
      * Método chamado quando o jogador pressiona TAB para completar o comando.
      * Este comando não tem sugestões de tab completion.
+     * 
+     * Implementação:
+     * - Retorna lista vazia pois não há sugestões
+     * - Implementado para satisfazer a interface
      * 
      * @param sender Quem está tentando completar o comando
      * @param command O comando que está sendo completado

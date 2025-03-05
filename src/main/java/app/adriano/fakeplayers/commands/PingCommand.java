@@ -11,15 +11,17 @@ import org.bukkit.command.TabCompleter;
  * Comando que testa a latência do plugin.
  * Este comando é executado quando um jogador ou o console usa o comando /fp ping
  * 
- * O comando:
- * - Responde com "pong"
- * - Mostra o tempo de resposta em milissegundos
- * - Usa cores diferentes para melhor visualização
+ * Implementação:
+ * 1. Armazena o timestamp da última execução
+ * 2. Calcula o tempo de resposta atual
+ * 3. Formata a mensagem com cores diferentes
+ * 4. Envia a resposta ao jogador
  * 
- * Este comando é útil para:
- * 1. Testar se o plugin está respondendo
- * 2. Medir a latência do servidor
- * 3. Verificar se há problemas de performance
+ * Detalhes Técnicos:
+ * - Usa System.currentTimeMillis() para precisão em milissegundos
+ * - Implementa CommandExecutor para processar o comando
+ * - Implementa TabCompleter para sugestões (não utilizado)
+ * - Utiliza Adventure API para formatação de texto
  * 
  * @see org.bukkit.command.CommandExecutor
  * @see org.bukkit.command.TabCompleter
@@ -30,6 +32,11 @@ public class PingCommand implements CommandExecutor, TabCompleter {
      * Armazena o timestamp da última execução do comando.
      * É usado para calcular o tempo de resposta entre chamadas.
      * 
+     * Implementação:
+     * - Inicializado no construtor
+     * - Atualizado a cada execução
+     * - Usado para calcular latência
+     * 
      * @see System#currentTimeMillis()
      */
     private long lastPingTime;
@@ -37,6 +44,11 @@ public class PingCommand implements CommandExecutor, TabCompleter {
     /**
      * Construtor do comando.
      * Inicializa o timestamp da última execução com o tempo atual.
+     * 
+     * Implementação:
+     * - Chama super() para inicializar a classe base
+     * - Define lastPingTime com o tempo atual
+     * - Prepara o comando para primeira execução
      * 
      * @see System#currentTimeMillis()
      */
@@ -47,6 +59,12 @@ public class PingCommand implements CommandExecutor, TabCompleter {
     /**
      * Método chamado quando o comando é executado.
      * Calcula o tempo de resposta e envia uma mensagem formatada.
+     * 
+     * Implementação:
+     * 1. Obtém o tempo atual
+     * 2. Calcula a diferença com o último ping
+     * 3. Atualiza o timestamp
+     * 4. Formata e envia a mensagem
      * 
      * @param sender Quem executou o comando (jogador ou console)
      * @param command O comando que foi executado
@@ -82,6 +100,10 @@ public class PingCommand implements CommandExecutor, TabCompleter {
     /**
      * Método chamado quando o jogador pressiona TAB para completar o comando.
      * Este comando não tem sugestões de tab completion.
+     * 
+     * Implementação:
+     * - Retorna lista vazia pois não há sugestões
+     * - Implementado para satisfazer a interface
      * 
      * @param sender Quem está tentando completar o comando
      * @param command O comando que está sendo completado

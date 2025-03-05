@@ -3,6 +3,7 @@ package app.adriano.fakeplayers;
 // Importações necessárias para manipulação de texto e cores no console
 import app.adriano.fakeplayers.commands.InfoCommand;
 import app.adriano.fakeplayers.commands.PingCommand;
+import app.adriano.fakeplayers.listeners.TestListener;
 import net.kyori.adventure.text.Component;  // Classe principal para manipulação de texto
 import net.kyori.adventure.text.format.NamedTextColor;  // Classe para cores predefinidas
 import org.bukkit.command.Command;
@@ -25,6 +26,8 @@ import org.bukkit.plugin.java.JavaPlugin;  // Classe base para plugins do Bukkit
  */
 public final class FakePlayersPlugin extends JavaPlugin {
 
+    private TestListener testListener;
+
     /**
      * Método chamado quando o plugin é habilitado.
      * Este método é executado quando o servidor inicia ou quando o plugin é recarregado.
@@ -42,6 +45,10 @@ public final class FakePlayersPlugin extends JavaPlugin {
      */
     @Override
     public void onEnable() {
+        // Registra o listener de teste
+        testListener = new TestListener(this);
+        testListener.register();
+        
         // Registra os comandos do plugin
         // Cria e configura o comando principal
         CommandExecutor executor = (sender, command, label, args) -> {
@@ -133,6 +140,11 @@ public final class FakePlayersPlugin extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+        // Desregistra o listener de teste
+        if (testListener != null) {
+            testListener.unregister();
+        }
+        
         // TODO: Implementar lógica de desativação
         // 1. Salvar dados
         // 2. Limpar recursos

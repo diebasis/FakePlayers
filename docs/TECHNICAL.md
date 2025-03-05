@@ -31,19 +31,69 @@ app.adriano.fakeplayers/
 └── listeners/               # Pacote de listeners (futuro)
 ```
 
+### Diagramas de Sequência
+
+#### Comando /fp info
+```mermaid
+sequenceDiagram
+    participant Player
+    participant Server
+    participant InfoCommand
+    participant FakePlayersPlugin
+    
+    Player->>Server: /fp info
+    Server->>InfoCommand: onCommand()
+    InfoCommand->>FakePlayersPlugin: getPluginMeta()
+    FakePlayersPlugin-->>InfoCommand: PluginMeta
+    InfoCommand-->>Player: Informações formatadas
+```
+
+#### Comando /fp ping
+```mermaid
+sequenceDiagram
+    participant Player
+    participant Server
+    participant PingCommand
+    
+    Player->>Server: /fp ping
+    Server->>PingCommand: onCommand()
+    Note over PingCommand: Calcula tempo de resposta
+    PingCommand-->>Player: Pong + tempo
+```
+
+### Fluxogramas
+
+#### Fluxo de Execução do Plugin
+```mermaid
+graph TD
+    A[Servidor Inicia] --> B[Carrega Plugin]
+    B --> C[onEnable]
+    C --> D[Registra Comandos]
+    D --> E[Registra Listeners]
+    E --> F[Carrega Configurações]
+    F --> G[Plugin Pronto]
+```
+
 ### Padrões de Design Utilizados
 1. **Singleton**: Para a classe principal do plugin
-2. **Command Pattern**: Para implementação de comandos
-3. **Observer Pattern**: Para listeners de eventos (futuro)
-4. **Factory Pattern**: Para criação de Fake Players (futuro)
+   - Garante uma única instância do plugin
+   - Facilita acesso global às configurações
+   - Implementado através do `JavaPlugin`
 
-### Fluxo de Execução
-1. O servidor carrega o plugin
-2. `FakePlayersPlugin.onEnable()` é chamado
-3. Comandos são registrados
-4. Listeners são registrados (futuro)
-5. Configurações são carregadas
-6. Plugin está pronto para uso
+2. **Command Pattern**: Para implementação de comandos
+   - Separa a lógica de execução dos comandos
+   - Facilita adição de novos comandos
+   - Implementa `CommandExecutor` e `TabCompleter`
+
+3. **Observer Pattern**: Para listeners de eventos
+   - Permite reação a eventos do servidor
+   - Desacopla a lógica de eventos
+   - Implementa interface `Listener`
+
+4. **Factory Pattern**: Para criação de Fake Players (futuro)
+   - Centraliza a criação de objetos
+   - Facilita extensão e manutenção
+   - Será implementado na versão 0.2.x
 
 ## 🔧 Detalhes Técnicos
 
@@ -59,8 +109,8 @@ app.adriano.fakeplayers/
 - `config.yml`: Configurações do plugin (futuro)
 
 ### Comandos
-- `/fp info`: Mostra informações do plugin
-- `/fp ping`: Testa a latência do plugin
+- `/fp info`: Mostra informações detalhadas sobre o plugin
+- `/fp ping`: Testa a latência do servidor e do plugin
 - Mais comandos serão adicionados no futuro
 
 ### Permissões
@@ -116,6 +166,7 @@ app.adriano.fakeplayers/
 ### Versão 0.1.x
 - [x] Estrutura básica do plugin
 - [x] Comandos básicos
+- [x] Listener básico (TestListener)
 - [ ] Sistema de configuração
 
 ### Versão 0.2.x
@@ -126,4 +177,35 @@ app.adriano.fakeplayers/
 ### Versão 0.3.x
 - [ ] Sistema de IA
 - [ ] Interações complexas
-- [ ] API pública 
+- [ ] API pública
+
+## Funcionalidades
+
+- **Comandos:**
+  - `/fp info`: Exibe informações detalhadas sobre o plugin.
+  - `/fp ping`: Testa a latência do servidor e do plugin.
+
+- **Listeners:**
+  - `TestListener`: Listener básico que registra quando um jogador entra no servidor.
+
+## Estrutura do Projeto
+
+```uml
+@startuml
+FakePlayersPlugin --> InfoCommand
+FakePlayersPlugin --> PingCommand
+FakePlayersPlugin --> TestListener
+TestListener --|> BaseListener
+@enduml
+```
+
+## Referências Externas
+
+- [Bukkit API](https://hub.spigotmc.org/javadocs/bukkit/)
+- [Paper API](https://papermc.io/javadocs/paper/)
+- [Adventure API](https://docs.adventure.kyori.net/)
+
+## Bibliotecas e Frameworks
+
+- **Bukkit/Paper:** Plataforma base para desenvolvimento do plugin.
+- **Adventure API:** Manipulação avançada de texto e cores no console e mensagens do jogo. 
