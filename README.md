@@ -10,6 +10,10 @@ FakePlayers é um plugin que permite criar Fake Players no seu servidor Minecraf
 - Criar ambientes mais realistas
 - E muito mais!
 
+## 📚 Documentação
+
+Para documentação técnica detalhada, incluindo guias de desenvolvimento, boas práticas e referências, consulte [Documentação Técnica](docs/TECHNICAL.md).
+
 ## 🚀 Funcionalidades
 
 - [ ] Criação de Fake Players
@@ -20,20 +24,105 @@ FakePlayers é um plugin que permite criar Fake Players no seu servidor Minecraf
 
 ## 📦 Instalação
 
-1. Baixe o arquivo `.jar` da última release
-2. Coloque o arquivo na pasta `plugins` do seu servidor Paper
-3. Reinicie o servidor
+1. Baixe o arquivo `FakePlayers-0.1.2.jar` da última versão.
+2. Coloque o arquivo na pasta `plugins` do seu servidor Minecraft.
+3. Reinicie o servidor para carregar o plugin.
 
-## ⚙️ Configuração
+## 🔑 Permissões
 
-O arquivo de configuração será gerado automaticamente na primeira execução do plugin.
+- `fakeplayers.use`: Permissão base para usar comandos do plugin
+- `fakeplayers.admin`: Permissão para acessar comandos administrativos (futuro)
 
-```yaml
-# Configurações padrão
-settings:
-  max-fake-players: 10
-  auto-spawn: false
+## 📖 Exemplos de Uso
+
+### Comandos
+
+#### /fp info
+Exibe informações detalhadas sobre o plugin, incluindo:
+- Versão atual
+- Autores
+- Descrição
+- Status do plugin
+
+Exemplo:
 ```
+/fp info
+```
+
+#### /fp ping
+Testa a latência do servidor e do plugin, mostrando:
+- Tempo de resposta em milissegundos
+- Status do servidor
+- Performance do plugin
+
+Exemplo:
+```
+/fp ping
+```
+
+### Listeners
+
+#### TestListener
+Registra quando um jogador entra no servidor, útil para:
+- Monitoramento de atividade
+- Testes de integração
+- Debug de problemas
+
+## 🛠️ Troubleshooting
+
+### Problemas Comuns
+
+1. **Plugin não carrega**
+   - Verifique se o arquivo .jar está na pasta plugins
+   - Confirme se está usando a versão correta do Paper
+   - Verifique os logs do servidor para mais detalhes
+
+2. **Comandos não funcionam**
+   - Confirme se tem a permissão `fakeplayers.use`
+   - Verifique se o plugin está ativo com `/fp info`
+   - Reinicie o servidor se necessário
+
+3. **Erros de Performance**
+   - Use `/fp ping` para verificar latência
+   - Monitore o uso de recursos do servidor
+   - Verifique se há conflitos com outros plugins
+
+## 📝 Changelog
+
+### Versão 0.1.3
+- Corrigido duplicação de mensagens do TestListener
+- Removido SimpleTestListener não utilizado
+- Melhorias na formatação das mensagens
+
+### Versão 0.1.2
+- Adicionado comando `/fp info` para exibir informações do plugin
+- Adicionado comando `/fp ping` para testar a latência
+- Implementado `TestListener` para registrar entradas de jogadores
+- Melhorias na documentação e comentários do código
+
+### Versão 0.1.1
+- Estrutura básica do plugin
+- Sistema de comandos inicial
+- Documentação técnica básica
+
+## Roadmap
+
+### Versão 0.1.x
+- [x] Estrutura básica do plugin
+- [x] Comandos básicos
+- [x] Listener básico (TestListener)
+- [x] Correções e melhorias
+- [ ] Sistema de configuração
+
+### Versão 0.2.x
+- [ ] Criação de Fake Players
+- [ ] Personalização de aparência
+- [ ] Comportamentos básicos
+
+### Versão 0.3.x
+- [ ] Sistema de IA
+- [ ] Interações complexas
+- [ ] API pública
 
 ## 💻 Desenvolvimento
 
